@@ -39,7 +39,8 @@ BIND_GLOBAL( "GF2Zero", 0*Z(2) );
 ##
 DeclareRepresentation(
     "IsGF2VectorRep",
-    IsDataObjectRep and IsRowVectorObj, [],
+#X    IsDataObjectRep and IsRowVectorObj, [],
+    IsDataObjectRep, [],
     IsRowVector );
 
 
@@ -297,7 +298,8 @@ end );
 ##
 DeclareRepresentation(
     "IsGF2MatrixRep",
-    IsPositionalObjectRep and IsRowListMatrix, [],
+#    IsPositionalObjectRep and IsRowListMatrix, [],
+    IsPositionalObjectRep and IsAssociativeElement, [],
     IsMatrix );
 
 

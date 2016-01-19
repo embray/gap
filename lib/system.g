@@ -29,6 +29,7 @@ BIND_GLOBAL( "GAPInfo", rec(
 # Without the needed packages, GAP does not start.
     Dependencies := rec(
       NeededOtherPackages := [
+        [ "matrices", ">= 0.0"],
         [ "gapdoc", ">= 1.2" ],
       ],
            ),

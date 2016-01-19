@@ -2091,362 +2091,363 @@ end);
 ##
 #M  ZeroVector( len, <vector> )
 ##
-InstallMethod( ZeroVector, "for an int and a gf2 vector",
-  [IsInt, IsGF2VectorRep],
-  function( len, v )
-    return ZERO_GF2VEC_2(len);
-  end );
-
-InstallMethod( ZeroVector, "for an int and a gf2 matrix",
-  [IsInt, IsGF2MatrixRep],
-  function( len, m )
-    return ZERO_GF2VEC_2(len);
-  end );
-
+#InstallMethod( ZeroVector, "for an int and a gf2 vector",
+#  [IsInt, IsGF2VectorRep],
+#  function( len, v )
+#    return ZERO_GF2VEC_2(len);
+#  end );
+#
+#InstallMethod( ZeroVector, "for an int and a gf2 matrix",
+#  [IsInt, IsGF2MatrixRep],
+#  function( len, m )
+#    return ZERO_GF2VEC_2(len);
+#  end );
+#
 
 #############################################################################
 ##
 ##  Stuff to adhere to new vector/matrix interface:
 ##
-InstallMethod( BaseDomain, "for a gf2 vector",
-  [ IsGF2VectorRep ], function( v ) return GF(2); end );
-InstallMethod( BaseDomain, "for a gf2 matrix",
-  [ IsGF2MatrixRep ], function( m ) return GF(2); end );
-InstallMethod( RowLength, "for a gf2 matrix",
-  [ IsGF2MatrixRep ], function( m ) return Length(m[1]); end );
-# FIXME: this breaks down for matrices with 0 rows
-InstallMethod( Vector, "for a list of gf2 elements and a gf2 vector",
-  [ IsList and IsFFECollection, IsGF2VectorRep ],
-  function( l, v )
-    local r; r := ShallowCopy(l); ConvertToVectorRep(r,2); return r;
-  end );
-InstallMethod( Randomize, "for a mutable gf2 vector",
-  [ IsGF2VectorRep and IsMutable ],
-  function( v ) 
-    local i;
-    MultRowVector(v,0);
-    for i in [1..Length(v)] do 
-        if Random(0,1) = 1 then v[i] := Z(2); fi;
-    od;
-    return v;
-  end );
-InstallMethod( Randomize, "for a mutable gf2 vector and a random source",
-  [ IsGF2VectorRep and IsMutable, IsRandomSource ],
-  function( v, rs ) 
-    local i;
-    MultRowVector(v,0);
-    for i in [1..Length(v)] do 
-        if Random(rs,0,1) = 1 then v[i] := Z(2); fi;
-    od;
-    return v;
-  end );
-InstallMethod( MutableCopyMat, "for a gf2 matrix",
-  [ IsGF2MatrixRep ],
-  function( m )
-    local mm; 
-    mm := List(m,ShallowCopy); 
-    ConvertToMatrixRep(mm,2);
-    return mm;
-  end );
-InstallMethod( MatElm, "for a gf2 matrix and two integers",
-  [ IsGF2MatrixRep, IsPosInt, IsPosInt ],
-  function( m, r, c ) return m[r][c]; end );
-InstallMethod( SetMatElm, "for a gf2 matrix, two integers, and a ffe",
-  [ IsGF2MatrixRep, IsPosInt, IsPosInt, IsFFE ],
-  function( m, r, c, e ) m[r][c] := e; end );
-InstallMethod( Matrix, "for a list of vecs, an integer, and a gf2 mat",
-  [IsList, IsInt, IsGF2MatrixRep],
-  function(l,rl,m)
-    local i,li;
-    if not(IsList(l[1])) then
-        li := [];
-        for i in [1..QuoInt(Length(l),rl)] do
-            li[i] := l{[(i-1)*rl+1..i*rl]};
-        od;
-    else  
-        li:= ShallowCopy(l);
-    fi;
-    # FIXME: Does not work for matrices m with no rows
-    ConvertToMatrixRep(li,2);
-    return li;
-  end );
-BindGlobal( "PositionLastNonZeroFunc",
-  function(l)
-    local i;
-    i := Length(l);
-    while i >= 1 and IsZero(l[i]) do i := i - 1; od;
-    return i;
-  end );
-BindGlobal( "PositionLastNonZeroFunc2",
-  function(l,pos)
-    local i;
-    i := pos-1;
-    while i >= 1 and IsZero(l[i]) do i := i - 1; od;
-    return i;
-  end );
+#InstallMethod( BaseDomain, "for a gf2 vector",
+#  [ IsGF2VectorRep ], function( v ) return GF(2); end );
+#InstallMethod( BaseDomain, "for a gf2 matrix",
+#  [ IsGF2MatrixRep ], function( m ) return GF(2); end );
+#InstallMethod( RowLength, "for a gf2 matrix",
+#  [ IsGF2MatrixRep ], function( m ) return Length(m[1]); end );
+## FIXME: this breaks down for matrices with 0 rows
+#InstallMethod( Vector, "for a list of gf2 elements and a gf2 vector",
+#  [ IsList and IsFFECollection, IsGF2VectorRep ],
+#  function( l, v )
+#    local r; r := ShallowCopy(l); ConvertToVectorRep(r,2); return r;
+#  end );
+#InstallMethod( Randomize, "for a mutable gf2 vector",
+#  [ IsGF2VectorRep and IsMutable ],
+#  function( v ) 
+#    local i;
+#    MultRowVector(v,0);
+#    for i in [1..Length(v)] do 
+#        if Random(0,1) = 1 then v[i] := Z(2); fi;
+#    od;
+#    return v;
+#  end );
+#InstallMethod( Randomize, "for a mutable gf2 vector and a random source",
+#  [ IsGF2VectorRep and IsMutable, IsRandomSource ],
+#  function( v, rs ) 
+#    local i;
+#    MultRowVector(v,0);
+#    for i in [1..Length(v)] do 
+#        if Random(rs,0,1) = 1 then v[i] := Z(2); fi;
+#    od;
+#    return v;
+#  end );
+#InstallMethod( MutableCopyMat, "for a gf2 matrix",
+#  [ IsGF2MatrixRep ],
+#  function( m )
+#    local mm; 
+#    mm := List(m,ShallowCopy); 
+#    ConvertToMatrixRep(mm,2);
+#    return mm;
+#  end );
+#InstallMethod( MatElm, "for a gf2 matrix and two integers",
+#  [ IsGF2MatrixRep, IsPosInt, IsPosInt ],
+#  function( m, r, c ) return m[r][c]; end );
+#InstallMethod( SetMatElm, "for a gf2 matrix, two integers, and a ffe",
+#  [ IsGF2MatrixRep, IsPosInt, IsPosInt, IsFFE ],
+#  function( m, r, c, e ) m[r][c] := e; end );
+#InstallMethod( Matrix, "for a list of vecs, an integer, and a gf2 mat",
+#  [IsList, IsInt, IsGF2MatrixRep],
+#  function(l,rl,m)
+#    local i,li;
+#    if not(IsList(l[1])) then
+#        li := [];
+#        for i in [1..QuoInt(Length(l),rl)] do
+#            li[i] := l{[(i-1)*rl+1..i*rl]};
+#        od;
+#    else  
+#        li:= ShallowCopy(l);
+#    fi;
+#    # FIXME: Does not work for matrices m with no rows
+#    ConvertToMatrixRep(li,2);
+#    return li;
+#  end );
+#BindGlobal( "PositionLastNonZeroFunc",
+#  function(l)
+#    local i;
+#    i := Length(l);
+#    while i >= 1 and IsZero(l[i]) do i := i - 1; od;
+#    return i;
+#  end );
+#BindGlobal( "PositionLastNonZeroFunc2",
+#  function(l,pos)
+#    local i;
+#    i := pos-1;
+#    while i >= 1 and IsZero(l[i]) do i := i - 1; od;
+#    return i;
+#  end );
+#
+## InstallMethod( PositionLastNonZero, "for a row vector obj",
+##  [IsRowVectorObj], PositionLastNonZeroFunc );
+##InstallMethod( PositionLastNonZero, "for a matrix obj",
+##  [IsMatrixObj], PositionLastNonZeroFunc );
+##InstallMethod( PositionLastNonZero, "for a matrix obj, and an index",
+##  [IsMatrixObj, IsPosInt], PositionLastNonZeroFunc2 );
+#        
+#InstallMethod( ExtractSubMatrix, "for a gf2 matrix, and two lists",
+#  [IsGF2MatrixRep, IsList, IsList],
+#  function( m, rows, cols )
+#    local mm,r;
+#    mm := [];
+#    for r in rows do
+#        Add(mm, m![r+1]{cols});
+#    od;
+#    ConvertToMatrixRepNC(mm,2);
+#    return mm;
+#  end );
+#
+#InstallMethod( CopySubVector, "for two gf2 vectors, and two ranges",
+#  [IsGF2VectorRep, IsGF2VectorRep and IsMutable, IsRange, IsRange],
+#        function( v, w, f, t )
+#    local l;
+#    l := Length(f);
+#    Assert(2, l = Length(t));
+#    if l <= 1 or (f[2] - f[1] = 1 and t[2] - t[1] = 1) then
+#        COPY_SECTION_GF2VECS(v,w,f[1],t[1],l);
+#    else
+#        TryNextMethod();
+#    fi;
+#  end );
+#  
+#  InstallMethod( CopySubVector, "for two gf2 vectors, and two lists",
+#  [IsGF2VectorRep, IsGF2VectorRep and IsMutable, IsList, IsList],
+#        function( v, w, f, t )
+#    w{t} := v{f};
+#  end );
+#
+#InstallMethod( CopySubMatrix, "for two gf2 matrices, and four lists",
+#  [IsGF2MatrixRep, IsGF2MatrixRep, IsList, IsList, IsList, IsList],
+#        function( a, b, frows, trows, fcols, tcols )
+#    local   i;
+#    for i in [1..Length(frows)] do
+#        CopySubVector(a[frows[i]],b[trows[i]], fcols, tcols);
+#    od;
+#end );
+#
+#InstallMethod( CopySubMatrix, "for two gf2 matrices, two lists and two ranges",
+#  [IsGF2MatrixRep, IsGF2MatrixRep, IsList, IsList, IsRange, IsRange],
+#        function( a, b, frows, trows, fcols, tcols )
+#    local   l,  i;
+#    l := Length(fcols);
+#    Assert(2, l = Length(tcols));
+#    if l <= 1 or (fcols[2] - fcols[1] = 1 and tcols[2] - tcols[1] = 1) then
+#        for i in [1..Length(frows)] do
+#            COPY_SECTION_GF2VECS(a[frows[i]],b[trows[i]],fcols[1],tcols[1],l);
+#        od;
+#    else
+#        TryNextMethod();
+#    fi;
+#end );
+#
+#
+#
+#InstallMethod( Randomize, "for a mutable gf2 matrix",
+#  [IsGF2MatrixRep and IsMutable],
+#  function( m )
+#    local v;
+#    for v in m do Randomize(v); od;
+#    return m;
+#  end );
+#
+#InstallMethod( Randomize, "for a mutable gf2 matrix, and a random source",
+#  [IsGF2MatrixRep and IsMutable, IsRandomSource],
+#  function( m, rs )
+#    local v;
+#    for v in m do Randomize(v,rs); od;
+#    return m;
+#  end );
 
-InstallMethod( PositionLastNonZero, "for a row vector obj",
-  [IsRowVectorObj], PositionLastNonZeroFunc );
-InstallMethod( PositionLastNonZero, "for a matrix obj",
-  [IsMatrixObj], PositionLastNonZeroFunc );
-InstallMethod( PositionLastNonZero, "for a matrix obj, and an index",
-  [IsMatrixObj, IsPosInt], PositionLastNonZeroFunc2 );
-        
-InstallMethod( ExtractSubMatrix, "for a gf2 matrix, and two lists",
-  [IsGF2MatrixRep, IsList, IsList],
-  function( m, rows, cols )
-    local mm,r;
-    mm := [];
-    for r in rows do
-        Add(mm, m![r+1]{cols});
-    od;
-    ConvertToMatrixRepNC(mm,2);
-    return mm;
-  end );
-
-InstallMethod( CopySubVector, "for two gf2 vectors, and two ranges",
-  [IsGF2VectorRep, IsGF2VectorRep and IsMutable, IsRange, IsRange],
-        function( v, w, f, t )
-    local l;
-    l := Length(f);
-    Assert(2, l = Length(t));
-    if l <= 1 or (f[2] - f[1] = 1 and t[2] - t[1] = 1) then
-        COPY_SECTION_GF2VECS(v,w,f[1],t[1],l);
-    else
-        TryNextMethod();
-    fi;
-  end );
-  
-  InstallMethod( CopySubVector, "for two gf2 vectors, and two lists",
-  [IsGF2VectorRep, IsGF2VectorRep and IsMutable, IsList, IsList],
-        function( v, w, f, t )
-    w{t} := v{f};
-  end );
-
-InstallMethod( CopySubMatrix, "for two gf2 matrices, and four lists",
-  [IsGF2MatrixRep, IsGF2MatrixRep, IsList, IsList, IsList, IsList],
-        function( a, b, frows, trows, fcols, tcols )
-    local   i;
-    for i in [1..Length(frows)] do
-        CopySubVector(a[frows[i]],b[trows[i]], fcols, tcols);
-    od;
-end );
-
-InstallMethod( CopySubMatrix, "for two gf2 matrices, two lists and two ranges",
-  [IsGF2MatrixRep, IsGF2MatrixRep, IsList, IsList, IsRange, IsRange],
-        function( a, b, frows, trows, fcols, tcols )
-    local   l,  i;
-    l := Length(fcols);
-    Assert(2, l = Length(tcols));
-    if l <= 1 or (fcols[2] - fcols[1] = 1 and tcols[2] - tcols[1] = 1) then
-        for i in [1..Length(frows)] do
-            COPY_SECTION_GF2VECS(a[frows[i]],b[trows[i]],fcols[1],tcols[1],l);
-        od;
-    else
-        TryNextMethod();
-    fi;
-end );
-
-
-
-InstallMethod( Randomize, "for a mutable gf2 matrix",
-  [IsGF2MatrixRep and IsMutable],
-  function( m )
-    local v;
-    for v in m do Randomize(v); od;
-    return m;
-  end );
-
-InstallMethod( Randomize, "for a mutable gf2 matrix, and a random source",
-  [IsGF2MatrixRep and IsMutable, IsRandomSource],
-  function( m, rs )
-    local v;
-    for v in m do Randomize(v,rs); od;
-    return m;
-  end );
-
-InstallMethod( Unpack, "for a gf2 matrix",
-  [IsGF2MatrixRep],
-  function( m )
-    return List(m,AsPlist);
-  end );
-InstallMethod( Unpack, "for a gf2 vector",
-  [IsGF2VectorRep],
-  function( v ) return AsPlist(v); end );
+#InstallMethod( Unpack, "for a gf2 matrix",
+#  [IsGF2MatrixRep],
+#  function( m )
+#    return List(m,AsPlist);
+#  end );
+#InstallMethod( Unpack, "for a gf2 vector",
+#  [IsGF2VectorRep],
+#  function( v ) return AsPlist(v); end );
 
 InstallOtherMethod( KroneckerProduct, "for two gf2 matrices",
   [IsGF2MatrixRep and IsMatrix, IsGF2MatrixRep and IsMatrix],
   KRONECKERPRODUCT_GF2MAT_GF2MAT );
 
-InstallMethod( Fold, "for a gf2 vector, a positive int, and a gf2 matrix",
-  [ IsRowVectorObj and IsGF2VectorRep, IsPosInt, IsGF2MatrixRep ],
-  function( v, rl, t )
-    local rows,i,tt,m;
-    m := [];
-    tt := ZeroVector(rl,v);
-    for i in [1..Length(v)/rl] do
-        CopySubVector(v,tt,[(i-1)*rl+1..i*rl],[1..rl]);
-        Add(m,ShallowCopy(tt)); 
-    od;
-    ConvertToMatrixRep(m,2);
-    return m;
-  end );
+#InstallMethod( Fold, "for a gf2 vector, a positive int, and a gf2 matrix",
+##X  [ IsRowVectorObj and IsGF2VectorRep, IsPosInt, IsGF2MatrixRep ],
+#  [ IsGF2VectorRep, IsPosInt, IsGF2MatrixRep ],
+#  function( v, rl, t )
+#    local rows,i,tt,m;
+#    m := [];
+#    tt := ZeroVector(rl,v);
+#    for i in [1..Length(v)/rl] do
+#        CopySubVector(v,tt,[(i-1)*rl+1..i*rl],[1..rl]);
+#        Add(m,ShallowCopy(tt)); 
+#    od;
+#    ConvertToMatrixRep(m,2);
+#    return m;
+#  end );
 
-InstallMethod( ConstructingFilter, "for a gf2 vector",
-  [ IsGF2VectorRep ], function(v) return IsGF2VectorRep; end );
-InstallMethod( ConstructingFilter, "for a gf2 matrix",
-  [ IsGF2MatrixRep ], function(v) return IsGF2MatrixRep; end );
+#InstallMethod( ConstructingFilter, "for a gf2 vector",
+#  [ IsGF2VectorRep ], function(v) return IsGF2VectorRep; end );
+#InstallMethod( ConstructingFilter, "for a gf2 matrix",
+#  [ IsGF2MatrixRep ], function(v) return IsGF2MatrixRep; end );
 
 InstallMethod( BaseField, "for a compressed gf2 matrix",
   [IsGF2MatrixRep], function(m) return GF(2); end );
 InstallMethod( BaseField, "for a compressed gf2 vector",
   [IsGF2VectorRep], function(v) return GF(2); end );
 
-InstallMethod( NewRowVector, "for IsGF2VectorRep, GF(2), and a list",
-  [ IsGF2VectorRep, IsField and IsFinite, IsList ],
-  function( filter, f, l )
-    local v;
-    v := ShallowCopy(l);
-    ConvertToVectorRepNC(v,2);
-    return v;
-  end );
+#InstallMethod( NewRowVector, "for IsGF2VectorRep, GF(2), and a list",
+#  [ IsGF2VectorRep, IsField and IsFinite, IsList ],
+#  function( filter, f, l )
+#    local v;
+#    v := ShallowCopy(l);
+#    ConvertToVectorRepNC(v,2);
+#    return v;
+#  end );
 
-InstallMethod( ZeroMatrix, "for a compressed gf2 matrix",
-  [IsInt, IsInt, IsGF2MatrixRep],
-  function( rows, cols, m )
-    local l,i,x;
-    l := [];
-    x := m[1];
-    for i in [1..rows] do
-        Add(l,ZeroVector(cols,x));
-    od;
-    ConvertToMatrixRepNC(l,2);
-    return l;
-  end );
+#InstallMethod( ZeroMatrix, "for a compressed gf2 matrix",
+#  [IsInt, IsInt, IsGF2MatrixRep],
+#  function( rows, cols, m )
+#    local l,i,x;
+#    l := [];
+#    x := m[1];
+#    for i in [1..rows] do
+#        Add(l,ZeroVector(cols,x));
+#    od;
+#    ConvertToMatrixRepNC(l,2);
+#    return l;
+#  end );
 
-InstallMethod( NewZeroVector, "for IsGF2VectorRep, GF(2), and an int",
-  [ IsGF2VectorRep, IsField and IsFinite, IsInt ],
-  function( filter, f, i )
-    return ZERO_GF2VEC_2(i);
-  end );
+#InstallMethod( NewZeroVector, "for IsGF2VectorRep, GF(2), and an int",
+#  [ IsGF2VectorRep, IsField and IsFinite, IsInt ],
+#  function( filter, f, i )
+#    return ZERO_GF2VEC_2(i);
+#  end );
 
-InstallMethod( IdentityMatrix, "for a compressed gf2 matrix",
-  [IsInt, IsGF2MatrixRep],
-  function(rows,m)
-    local n;
-    n := IdentityMat(rows,GF(2));
-    ConvertToMatrixRepNC(n,2);
-    return n;
-  end );
+#InstallMethod( IdentityMatrix, "for a compressed gf2 matrix",
+#  [IsInt, IsGF2MatrixRep],
+#  function(rows,m)
+#    local n;
+#    n := IdentityMat(rows,GF(2));
+#    ConvertToMatrixRepNC(n,2);
+#    return n;
+#  end );
 
-InstallMethod( NewMatrix, "for IsGF2MatrixRep, GF(2), an int, and a list",
-  [ IsGF2MatrixRep, IsField and IsFinite, IsInt, IsList ],
-  function( filter, f, rl, l )
-    local m;
-    m := List(l,ShallowCopy);
-    ConvertToMatrixRep(m,2);
-    return m;
-  end );
+#InstallMethod( NewMatrix, "for IsGF2MatrixRep, GF(2), an int, and a list",
+#  [ IsGF2MatrixRep, IsField and IsFinite, IsInt, IsList ],
+#  function( filter, f, rl, l )
+#    local m;
+#    m := List(l,ShallowCopy);
+#    ConvertToMatrixRep(m,2);
+#    return m;
+#  end );
+#
+#InstallMethod( NewZeroMatrix, "for IsGF2MatrixRep, GF(2), and two ints",
+#  [ IsGF2MatrixRep, IsField and IsFinite, IsInt, IsInt ],
+#  function( filter, f, rows, cols )
+#    local m,i;
+#    m := 0*[1..rows];
+#    m[1] := NewZeroVector(IsGF2VectorRep,f,cols);
+#    for i in [2..rows] do
+#        m[i] := ShallowCopy(m[1]);
+#    od;
+#    ConvertToMatrixRep(m,2);
+#    return m;
+#  end );
 
-InstallMethod( NewZeroMatrix, "for IsGF2MatrixRep, GF(2), and two ints",
-  [ IsGF2MatrixRep, IsField and IsFinite, IsInt, IsInt ],
-  function( filter, f, rows, cols )
-    local m,i;
-    m := 0*[1..rows];
-    m[1] := NewZeroVector(IsGF2VectorRep,f,cols);
-    for i in [2..rows] do
-        m[i] := ShallowCopy(m[1]);
-    od;
-    ConvertToMatrixRep(m,2);
-    return m;
-  end );
+#InstallMethod( NewIdentityMatrix, "for IsGF2MatrixRep, GF(2), and an int",
+#  [ IsGF2MatrixRep, IsField and IsFinite, IsInt ],
+#  function( filter, f, rows )
+#    local m,i,o;
+#    m := 0*[1..rows];
+#    o := Z(2);
+#    m[1] := NewZeroVector(IsGF2VectorRep,f,rows);
+#    for i in [2..rows] do
+#        m[i] := ShallowCopy(m[1]);
+#        m[i][i] := o;
+#    od;
+#    m[1][1] := o;
+#    ConvertToMatrixRep(m,2);
+#    return m;
+#  end );
+#
+#InstallMethod( ChangedBaseDomain, "for a gf2 vector and a finite field",
+#  [ IsGF2VectorRep, IsField and IsFinite ],
+#  function( v, f )
+#    local w;
+#    w := Unpack(v);
+#    ConvertToVectorRep(w,Size(f));
+#    return w;
+#  end );
 
-InstallMethod( NewIdentityMatrix, "for IsGF2MatrixRep, GF(2), and an int",
-  [ IsGF2MatrixRep, IsField and IsFinite, IsInt ],
-  function( filter, f, rows )
-    local m,i,o;
-    m := 0*[1..rows];
-    o := Z(2);
-    m[1] := NewZeroVector(IsGF2VectorRep,f,rows);
-    for i in [2..rows] do
-        m[i] := ShallowCopy(m[1]);
-        m[i][i] := o;
-    od;
-    m[1][1] := o;
-    ConvertToMatrixRep(m,2);
-    return m;
-  end );
+#InstallMethod( ChangedBaseDomain, "for a gf2 matrix and a finite field",
+#  [ IsGF2MatrixRep, IsField and IsFinite ],
+#  function( v, f )
+#    local w,i;
+#    w := [];
+#    for i in [1..Length(v)] do
+#        Add(w,ChangedBaseDomain(v[i],f));
+#    od;
+#    ConvertToMatrixRep(w,Size(f));
+#    return w;
+#  end );
 
-InstallMethod( ChangedBaseDomain, "for a gf2 vector and a finite field",
-  [ IsGF2VectorRep, IsField and IsFinite ],
-  function( v, f )
-    local w;
-    w := Unpack(v);
-    ConvertToVectorRep(w,Size(f));
-    return w;
-  end );
+#InstallMethod( CompatibleVector, "for a gf2 matrix",
+#  [ IsGF2MatrixRep ],
+#  function( m )
+#    # This will break for a matrix with no rows
+#    return ShallowCopy(m[1]);
+#  end );
 
-InstallMethod( ChangedBaseDomain, "for a gf2 matrix and a finite field",
-  [ IsGF2MatrixRep, IsField and IsFinite ],
-  function( v, f )
-    local w,i;
-    w := [];
-    for i in [1..Length(v)] do
-        Add(w,ChangedBaseDomain(v[i],f));
-    od;
-    ConvertToMatrixRep(w,Size(f));
-    return w;
-  end );
+#InstallMethod( CompatibleMatrix, "for a gf2 vector",
+#  [ IsGF2VectorRep ],
+#  function( v )
+#    local m;
+#    m := [ShallowCopy(v)];
+#    ConvertToMatrixRep(m,2);
+#    return m;
+#  end );
 
-InstallMethod( CompatibleVector, "for a gf2 matrix",
-  [ IsGF2MatrixRep ],
-  function( m )
-    # This will break for a matrix with no rows
-    return ShallowCopy(m[1]);
-  end );
+#InstallMethod( WeightOfVector, "for a gf2 vector",
+#  [ IsGF2VectorRep ],
+#  function( v )
+#    return WeightVecFFE(v);
+#  end );
 
-InstallMethod( CompatibleMatrix, "for a gf2 vector",
-  [ IsGF2VectorRep ],
-  function( v )
-    local m;
-    m := [ShallowCopy(v)];
-    ConvertToMatrixRep(m,2);
-    return m;
-  end );
+#InstallMethod( DistanceOfVectors, "for two gf2 vectors",
+#  [ IsGF2VectorRep, IsGF2VectorRep ],
+#  function( v, w )
+#    return DistanceVecFFE(v,w);
+#  end );
 
-InstallMethod( WeightOfVector, "for a gf2 vector",
-  [ IsGF2VectorRep ],
-  function( v )
-    return WeightVecFFE(v);
-  end );
-
-InstallMethod( DistanceOfVectors, "for two gf2 vectors",
-  [ IsGF2VectorRep, IsGF2VectorRep ],
-  function( v, w )
-    return DistanceVecFFE(v,w);
-  end );
-
-InstallMethod( NewCompanionMatrix, 
-  "for IsGF2MatrixRep, a polynomial and a ring",
-  [ IsGF2MatrixRep, IsUnivariatePolynomial, IsRing ],
-  function( ty, po, bd )
-    local i,l,ll,n,one;
-    one := One(bd);
-    l := CoefficientsOfUnivariatePolynomial(po);
-    n := Length(l)-1;
-    if not(IsOne(l[n+1])) then
-        Error("CompanionMatrix: polynomial is not monic");
-        return fail;
-    fi;
-    l := -l{[1..n]};
-    ConvertToVectorRep(l,2);
-    ll := NewMatrix(ty,bd,n,[l]);
-    for i in [1..n-1] do
-        Add(ll,ZeroMutable(l),i);
-        ll[i][i+1] := one;
-    od;
-    return ll;
-  end );
+#InstallMethod( NewCompanionMatrix, 
+#  "for IsGF2MatrixRep, a polynomial and a ring",
+#  [ IsGF2MatrixRep, IsUnivariatePolynomial, IsRing ],
+#  function( ty, po, bd )
+#    local i,l,ll,n,one;
+#    one := One(bd);
+#    l := CoefficientsOfUnivariatePolynomial(po);
+#    n := Length(l)-1;
+#    if not(IsOne(l[n+1])) then
+#        Error("CompanionMatrix: polynomial is not monic");
+#        return fail;
+#    fi;
+#    l := -l{[1..n]};
+#    ConvertToVectorRep(l,2);
+#    ll := NewMatrix(ty,bd,n,[l]);
+#    for i in [1..n-1] do
+#        Add(ll,ZeroMutable(l),i);
+#        ll[i][i+1] := one;
+#    od;
+#    return ll;
+#  end );
 
 
 #############################################################################
