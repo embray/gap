@@ -81,9 +81,6 @@ ReadLib( "unknown.gd"  );
 ReadLib( "word.gd"     );
 ReadLib( "wordass.gd"  );
 
-ReadLib( "matobj2.gd"  );
-ReadLib( "matobjplist.gd" );
-
 # files dealing with rewriting systems
 ReadLib( "rws.gd"      );
 ReadLib( "rwspcclt.gd" );

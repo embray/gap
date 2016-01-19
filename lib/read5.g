@@ -94,11 +94,9 @@ ReadLib( "cyclotom.gi" );
 ReadLib( "fldabnum.gi" );
 ReadLib( "padics.gi"   );
 
-ReadLib( "matobj.gi"   );
 ReadLib( "vecmat.gi"   );
 ReadLib( "vec8bit.gi"  );
 ReadLib( "mat8bit.gi"  );
-ReadLib( "matobjplist.gi" );
 ReadLib( "meataxe.gi"  );
 ReadLib( "meatauto.gi" );
 
