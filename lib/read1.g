@@ -55,9 +55,9 @@ ReadLib( "assert.gd"   );
 ReadLib( "files.gd"    );
 ReadLib( "streams.gd"  );
 
-ReadLib( "vecmat.gd"   );
-ReadLib( "vec8bit.gd"   );
-ReadLib( "mat8bit.gd"   );
+#ReadLib( "vecmat.gd"   );
+#ReadLib( "vec8bit.gd"   );
+#ReadLib( "mat8bit.gd"   );
 
 ReadLib( "global.gd"   );
 

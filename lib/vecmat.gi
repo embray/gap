@@ -11,6 +11,8 @@
 ##  with GF2 vectors and matrices.
 ##
 
+Print("VECMAT.GI BEING LOADED!!!");
+
 #############################################################################
 ##
 #F IsLockedRepresentationVector . . filter used by GF2 and GF(q)
